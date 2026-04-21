@@ -65,7 +65,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy to server
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
@@ -76,3 +76,4 @@ jobs:
             echo "APP_ENV=production" >> .env
             docker compose pull
             docker compose up -d
+
