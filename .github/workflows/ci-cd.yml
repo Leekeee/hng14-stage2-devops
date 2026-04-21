@@ -59,6 +59,15 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
+      - name: Debug SSH key presence
+      run: |
+        if [ -z "${{ secrets.SERVER_SSH_KEY }}" ]; then
+          echo "SSH key is EMPTY"
+          exit 1
+        else
+          echo "SSH key is present"
+        fi
+
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push
