@@ -12,7 +12,7 @@ r = redis.Redis(
 )
 
 
-@app.post("/jobs")
+@app.post("/jobs", status_code=201)
 def create_job():
     job_id = str(uuid.uuid4())
     r.lpush("job", job_id)
