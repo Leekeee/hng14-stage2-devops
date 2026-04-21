@@ -65,4 +65,4 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy to server
-        uses: appleboy/ssh-actio
+       uses: appleboy/ssh-action@v1.0.0
