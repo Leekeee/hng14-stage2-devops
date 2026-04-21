@@ -17,7 +17,7 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 
 # Copy application code
-COPY main.py .
+COPY ./main.py .
 
 # Switch to non-root user
 USER appuser
