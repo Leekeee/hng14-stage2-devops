@@ -71,10 +71,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-             cd /app
-             curl -o docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.yml
-             echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" > .env
-             echo "APP_ENV=production" >> .env
-             docker-compose pull
-             docker-compose up -d
-             
+            cd /app
+            curl -o docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.yml
+            echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" > .env
+            echo "APP_ENV=production" >> .env
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+            docker-compose pull
+            docker-compose up -d             
