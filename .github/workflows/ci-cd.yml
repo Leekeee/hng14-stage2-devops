@@ -76,6 +76,5 @@ jobs:
             echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" > .env
             echo "APP_ENV=production" >> .env
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
-            docker-compose pull
-            docker-compose up -d
-            
+            docker compose pull
+            docker compose up -d
