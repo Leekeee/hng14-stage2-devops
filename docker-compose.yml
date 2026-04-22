@@ -1,9 +1,21 @@
 version: "3.8"
 
+networks:
+  app-network:
+    driver: bridge
+
 services:
   redis:
     image: redis:7-alpine
     command: redis-server --requirepass ${REDIS_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -14,6 +26,19 @@ services:
     image: ${DOCKER_USERNAME}/api:latest
     ports:
       - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -25,6 +50,14 @@ services:
 
   worker:
     image: ${DOCKER_USERNAME}/worker:latest
+    restart: unless-stopped
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -37,7 +70,16 @@ services:
     image: ${DOCKER_USERNAME}/frontend:latest
     ports:
       - "3001:3000"
+    restart: unless-stopped
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
     environment:
       - API_URL=http://api:8000
     depends_on:
-      - api
+      api:
+        condition: service_healthy
