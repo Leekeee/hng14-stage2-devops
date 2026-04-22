@@ -9,7 +9,7 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Create non-root user
-RUN adduser -D appuser
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 
 # Copy dependencies from builder
 COPY --from=builder /app/node_modules ./node_modules
