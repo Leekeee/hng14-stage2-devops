@@ -9,23 +9,25 @@ from main import app
 
 client = TestClient(app)
 
-@patch("main.redis_client")
+@patch("main.r")
 def test_submit_job(mock_redis):
     mock_redis.lpush = MagicMock(return_value=1)
     mock_redis.hset = MagicMock(return_value=1)
     response = client.post("/jobs")
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert "job_id" in response.json()
 
-@patch("main.redis_client")
-def test_get_jobs(mock_redis):
-    mock_redis.hgetall = MagicMock(return_value={})
-    mock_redis.keys = MagicMock(return_value=[])
-    response = client.get("/jobs")
+@patch("main.r")
+def test_get_job_not_found(mock_redis):
+    mock_redis.hget = MagicMock(return_value=None)
+    response = client.get("/jobs/fake-id")
     assert response.status_code == 200
+    assert "error" in response.json()
 
-@patch("main.redis_client")
-def test_health_check(mock_redis):
-    mock_redis.ping = MagicMock(return_value=True)
-    response = client.get("/health")
+@patch("main.r")
+def test_get_job_found(mock_redis):
+    mock_redis.hget = MagicMock(return_value=b"queued")
+    response = client.get("/jobs/some-job-id")
     assert response.status_code == 200
+    assert response.json()["status"] == "queued"
+    
