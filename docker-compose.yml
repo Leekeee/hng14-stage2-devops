@@ -36,7 +36,7 @@ services:
   frontend:
     image: ${DOCKER_USERNAME}/frontend:latest
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - API_URL=http://api:8000
     depends_on:
