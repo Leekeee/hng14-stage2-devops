@@ -10,7 +10,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Create non-root user
-RUN adduser --disabled-password --gecos "" appuser
+RUN addgroup --system appuser && adduser --system --ingroup appuser appuser
 
 # Copy installed packages from builder
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
