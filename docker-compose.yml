@@ -11,7 +11,7 @@ services:
       retries: 3
 
   api:
-    build: ./api
+    image: ${DOCKER_USERNAME}/api:latest
     ports:
       - "8000:8000"
     environment:
@@ -24,7 +24,7 @@ services:
         condition: service_healthy
 
   worker:
-    build: ./worker
+    image: ${DOCKER_USERNAME}/worker:latest
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -34,7 +34,7 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./frontend
+    image: ${DOCKER_USERNAME}/frontend:latest
     ports:
       - "3000:3000"
     environment:
